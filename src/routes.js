@@ -17,7 +17,7 @@ routes.delete('/file/:id', File.delete);
 
 routes.get('/show/all', Show.all);
 routes.get('/show/allAfterNow', Show.allAfterNow);
-routes.post('/show/', Show.add);
+routes.post('/show', Show.add);
 routes.get('/show/:id', Show.index);
 
 routes.post('/register', Register.add);
@@ -27,7 +27,7 @@ routes.delete('/register/:id', Register.delete);
 routes.put('/register/:id', Register.upDate);
 
 routes.post('/login/', Register.login);
-routes.post('/loginConfirm/', Register.loginConfirm);
+routes.post('/loginConfirm', Register.loginConfirm);
 
 routes.post('/nameForList', NameForList.add);
 routes.get('/nameForList/allForUser/:id', NameForList.allForUser);
