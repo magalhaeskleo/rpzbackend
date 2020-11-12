@@ -11,7 +11,7 @@ module.exports = {
     },
     useNullAsDefault: true,
   },
-  /*
+
   production: {
     client: 'sqlite3',
     connection: {
@@ -24,16 +24,5 @@ module.exports = {
     migrations: {
       directory: './src/database/migrations',
     },
-  },
-  */
-  production: {
-    client: 'sqlite3',
-    connection: {
-      filename: './src/database/prod.sqlite',
-    },
-    migrations: {
-      directory: './src/database/migrations',
-    },
-    useNullAsDefault: true,
   },
 };

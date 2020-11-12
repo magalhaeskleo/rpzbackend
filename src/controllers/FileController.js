@@ -69,7 +69,10 @@ module.exports = {
       created,
       modified,
     });
-
-    return response.json({ id });
+    if (id) {
+      return response.json({ id });
+    } else {
+      return response.json({ error: 'Não foi possivel registrar a operação' });
+    }
   },
 };
