@@ -26,7 +26,7 @@ routes.get('/register/:id', Register.index);
 routes.delete('/register/:id', Register.delete);
 routes.put('/register/:id', Register.upDate);
 
-routes.post('/login/', Register.login);
+routes.post('/login', Register.login);
 routes.post('/loginConfirm', Register.loginConfirm);
 
 routes.post('/nameForList', NameForList.add);
