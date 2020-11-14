@@ -1,8 +1,8 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 const tableName = 'music_request';
 const fs = require('fs');
 var dateFormat = require('dateformat');
-const { table } = require('console');
+const authMiddleware = require('../middlewares/auth');
 
 function dateFormatWeek(day) {
   if (day === 'Monday') {

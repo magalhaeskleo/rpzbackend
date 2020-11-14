@@ -1,17 +1,12 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 const tableName = 'file';
 
 module.exports = {
   async all(request, response) {
-    //  const dot_id = request.headers.authorization;
-
     const tableItens = await connection(tableName).select('*');
-
     return response.json(tableItens);
   },
   async index(request, response) {
-    //  const dot_id = request.headers.authorization;
-
     const { id } = request.params;
     const tableItens = await connection(tableName)
       .select('*')
@@ -21,8 +16,6 @@ module.exports = {
     return response.json(tableItens);
   },
   async delete(request, response) {
-    //  const dot_id = request.headers.authorization;
-
     const { id } = request.params;
     const tableIten = await connection(tableName)
       .select('*')
@@ -40,8 +33,6 @@ module.exports = {
   },
 
   async add(request, response) {
-    //  const dot_id = request.headers.authorization;
-
     const {
       fieldname,
       originalname,

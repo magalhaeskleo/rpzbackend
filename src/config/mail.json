@@ -1,0 +1,23 @@
+{
+  "mailtrap": {
+    "host": "smtp.mailtrap.io",
+    "port": 2525,
+    "user": "de52a832b894af",
+    "pass": "7dd66536c8ac31"
+  },
+
+  "gmail": {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "user": "gruporpz.no.reply@gmail.com",
+    "pass": "Muitoprazer"
+  },
+
+  "sengrid": {
+    "key": "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",
+    "host": "smtp.google.com",
+    "port": 465,
+    "user": "gruporpzmuitoprazer@gmail.com",
+    "pass": "muitoprazer"
+  }
+}

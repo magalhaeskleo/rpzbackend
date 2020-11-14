@@ -1,4 +1,4 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 const tableName = 'name_for_list';
 const fs = require('fs');
 

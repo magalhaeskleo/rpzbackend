@@ -1,5 +1,4 @@
-const { request } = require('http');
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 const tableName = 'register';
 const crypto = require('crypto');
 

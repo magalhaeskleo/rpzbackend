@@ -1,4 +1,4 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 const tableName = 'show';
 const fs = require('fs');
 
@@ -99,7 +99,6 @@ module.exports = {
 
       let buff = fs.readFileSync(newElement.path);
       let base64data = buff.toString('base64');
-
       newTable.push({ ...newElement, base64data });
     });
 

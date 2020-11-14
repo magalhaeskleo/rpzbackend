@@ -3,6 +3,8 @@ exports.up = function (knex) {
     table.increments('id').primary();
     table.string('name', 255).notNullable();
     table.string('email', 255).notNullable();
+    table.string('passwordReset', 255);
+    table.date('passwordResetExpires');
     table.string('whatsapp', 255).notNullable();
     table.integer('perfil', 1).notNullable();
     table.string('chave', 255).notNullable();
