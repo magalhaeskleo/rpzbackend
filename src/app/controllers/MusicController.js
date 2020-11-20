@@ -4,29 +4,16 @@ const fs = require('fs');
 var dateFormat = require('dateformat');
 const authMiddleware = require('../middlewares/auth');
 
-function dateFormatWeek(day) {
-  if (day === 'Monday') {
-    return 'Segunda';
-  }
-  if (day === 'Tuesday') {
-    return 'Terça';
-  }
-  if (day === 'Wednesday') {
-    return 'Quarta';
-  }
-  if (day === 'Thursday') {
-    return 'Quinta';
-  }
-  if (day === 'Friday') {
-    return 'Sexta';
-  }
-  if (day === 'Saturday') {
-    return 'Sabado';
-  }
-  if (day === 'Sunday') {
-    return 'Domingo';
-  }
-}
+const dayWeekList = [
+  'Domingo',
+  'Segunda',
+  'Terça',
+  'Quarta',
+  'Quinta',
+  'Sexta',
+  'Sábado',
+];
+
 async function getMusic(idShow, id) {
   const musicList = await connection(tableName)
     .select('*')
@@ -42,6 +29,7 @@ async function getMusic(idShow, id) {
 
   return newListFormat;
 }
+
 async function getMusicAll(idShow) {
   const musicList = await connection(tableName)
     .select('*')
@@ -93,7 +81,8 @@ module.exports = {
         'file.path'
       )
       .where('idRegister', Number(id))
-      .groupBy('music_request.idShow');
+      .groupBy('music_request.idShow')
+      .orderBy('show.date', 'asc');
 
     const newTable = [];
 
@@ -102,10 +91,9 @@ module.exports = {
 
       const musicList = await getMusic(element.idShow, id);
 
-      let day = dateFormat(new Date(element.date), 'dd/mm');
-      let dayWeek = dateFormatWeek(
-        dateFormat(new Date(element.date), 'dddd').toString()
-      );
+      let day = new Date(element.date);
+      let dayFormat = dateFormat(day, 'dd/mm/yyyy');
+      let dayWeek = dayWeekList[day.getDay()];
 
       let buff = fs.readFileSync(element.path);
       let base64data = buff.toString('base64');
@@ -113,7 +101,7 @@ module.exports = {
       newTable.push({
         ...element,
         musicList,
-        date: `${dayWeek} ${day}`,
+        date: `${dayWeek} ${dayFormat}`,
         base64data,
       });
     }
@@ -135,7 +123,8 @@ module.exports = {
         'show.name',
         'file.path'
       )
-      .groupBy('music_request.idShow');
+      .groupBy('music_request.idShow')
+      .orderBy('show.date', 'asc');
 
     const newTable = [];
 
@@ -144,10 +133,9 @@ module.exports = {
 
       const musicList = await getMusicAll(element.idShow);
 
-      let day = dateFormat(new Date(element.date), 'dd/mm');
-      let dayWeek = dateFormatWeek(
-        dateFormat(new Date(element.date), 'dddd').toString()
-      );
+      let day = new Date(element.date);
+      let dayFormat = dateFormat(day, 'dd/mm/yyyy');
+      let dayWeek = dayWeekList[day.getDay()];
 
       let buff = fs.readFileSync(element.path);
       let base64data = buff.toString('base64');
@@ -155,7 +143,7 @@ module.exports = {
       newTable.push({
         ...element,
         musicList,
-        date: `${dayWeek} ${day}`,
+        date: `${dayWeek} ${dayFormat}`,
         base64data,
       });
     }

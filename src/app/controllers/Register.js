@@ -79,6 +79,32 @@ module.exports = {
 
   //*************************************************************** */
 
+  async editPerfil(req, res) {
+    const { perfilType } = req.body;
+    const idUser = req.params.id;
+
+    try {
+      const userEdit = await getUserForId(idUser);
+      const modified = new Date();
+
+      await connection(tableName)
+        .where('id', idUser)
+        .update({
+          ...userEdit,
+          perfil: perfilType,
+          modified,
+        });
+
+      const userUp = await getUserForId(idUser);
+
+      const { id, name, email, whatsapp, perfil } = userUp;
+
+      return res.json({ id, name, email, whatsapp, perfil });
+    } catch (error) {
+      return sendError(res, 'Operação não pode ser realizada tente mais tarde');
+    }
+  },
+
   async edit(req, res) {
     const { name, email, whatsapp, password } = req.body;
     const idUser = req.params.id;
@@ -231,9 +257,27 @@ module.exports = {
       );
     }
   },
+  async delete(req, res) {
+    const { id } = req.params.id;
+    const userExist = getUserForId(id);
+
+    if (userExist) {
+      const ok = await connection(tableName).where('id', id).delete();
+      return res.json({ ok: 'Show deletado com sucesso' });
+    }
+    {
+      return endError(
+        res,
+        'Não foi possivel deletar o show tente novamente mais tarde'
+      );
+    }
+  },
 };
 
 const getUserSimple = (form) => {
-  const { id, name, email, whatsapp } = form;
-  return { user: { id, name, email, whatsapp }, token: generateToken({ id }) };
+  const { id, name, email, whatsapp, perfil } = form;
+  return {
+    user: { id, name, email, whatsapp, perfil },
+    token: generateToken({ id }),
+  };
 };

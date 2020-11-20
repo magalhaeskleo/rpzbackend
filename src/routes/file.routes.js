@@ -10,6 +10,7 @@ const File = require('../app/controllers/FileController');
 routes.post('/file', multer(multerConfig).single('file'), File.add);
 routes.get('/file/all', File.all);
 routes.get('/file/:id', File.index);
-routes.delete('/file/:id', File.delete);
+routes.put('/file/:id', File.delete);
+routes.get('/fileSimpleList', File.fileSimpleList);
 
 module.exports = routes;

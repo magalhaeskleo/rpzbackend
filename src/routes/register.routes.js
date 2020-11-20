@@ -9,6 +9,7 @@ routes.post('/autentication', Register.autentication);
 routes.post('/forgot_password', Register.forgotPassword);
 routes.post('/reset_passWord', Register.resetarPassWord);
 routes.put('/edit/:id', Register.edit);
+routes.put('/editPerfil/:id', Register.editPerfil);
 
 routes.get('/register/all', RegisterCont.all);
 

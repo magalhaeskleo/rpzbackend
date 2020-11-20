@@ -4,29 +4,15 @@ const fs = require('fs');
 
 var dateFormat = require('dateformat');
 
-function dateFormatWeek(day) {
-  if (day === 'Monday') {
-    return 'Segunda';
-  }
-  if (day === 'Tuesday') {
-    return 'Terça';
-  }
-  if (day === 'Wednesday') {
-    return 'Quarta';
-  }
-  if (day === 'Thursday') {
-    return 'Quinta';
-  }
-  if (day === 'Friday') {
-    return 'Sexta';
-  }
-  if (day === 'Saturday') {
-    return 'Sabado';
-  }
-  if (day === 'Sunday') {
-    return 'Domingo';
-  }
-}
+const dayWeekList = [
+  'Domingo',
+  'Segunda',
+  'Terça',
+  'Quarta',
+  'Quinta',
+  'Sexta',
+  'Sábado',
+];
 
 async function getRegister(id) {
   const register = await connection(tableName)
@@ -87,21 +73,21 @@ module.exports = {
       .join('show', 'name_for_list.idShow', 'show.id')
       .join('file', 'show.flyer', 'file.id')
       .select('show.id', 'file.path', 'show.date', 'show.name')
-      .where('idRegister', Number(id));
+      .where('idRegister', Number(id))
+      .orderBy('show.date', 'asc');
 
     const newTable = [];
 
     tableItem.forEach((element) => {
-      let day = dateFormat(new Date(element.date), 'dd/mm');
-      let dayWeek = dateFormatWeek(
-        dateFormat(new Date(element.date), 'dddd').toString()
-      );
+      let day = new Date(element.date);
+      let dayFormat = dateFormat(day, 'dd/mm/yyyy');
+      let dayWeek = dayWeekList[day.getDay()];
 
       let newElement = {
         id: element.id,
         name: element.name,
         path: element.path,
-        date: `${dayWeek} ${day}`,
+        date: `${dayWeek} ${dayFormat}`,
       };
 
       let buff = fs.readFileSync(newElement.path);
@@ -119,7 +105,8 @@ module.exports = {
       .join('show', 'name_for_list.idShow', 'show.id')
       .join('file', 'show.flyer', 'file.id')
       .select('show.id', 'file.path', 'show.date', 'show.name')
-      .groupBy('name_for_list.idShow');
+      .groupBy('name_for_list.idShow')
+      .orderBy('show.date', 'asc');
 
     const newTable = [];
     for (let index = 0; index < myListEvents.length; index++) {
@@ -127,10 +114,9 @@ module.exports = {
 
       const registers = await getRegister(element.id);
 
-      let day = dateFormat(new Date(element.date), 'dd/mm');
-      let dayWeek = dateFormatWeek(
-        dateFormat(new Date(element.date), 'dddd').toString()
-      );
+      let day = new Date(element.date);
+      let dayFormat = dateFormat(day, 'dd/mm/yyyy');
+      let dayWeek = dayWeekList[day.getDay()];
 
       let buff = fs.readFileSync(element.path);
       let base64data = buff.toString('base64');
@@ -138,7 +124,7 @@ module.exports = {
       newTable.push({
         ...element,
         registers,
-        date: `${dayWeek} ${day}`,
+        date: `${dayWeek} ${dayFormat}`,
         base64data,
       });
     }
