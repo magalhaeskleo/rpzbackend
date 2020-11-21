@@ -9,6 +9,7 @@ const mailer = require('../models/mailer');
 const path = require('path');
 const fs = require('fs');
 const { use } = require('../models/mailer');
+const { date } = require('yup');
 const pathResolve = path.resolve('./src/html');
 const source = fs.readFileSync(pathResolve + '/model.html', {
   encoding: 'utf-8',
@@ -186,10 +187,10 @@ module.exports = {
           passwordReset: token,
           passwordResetExpires: now,
         });
-
+      const agora = new Date();
       const optionsEmail = {
         to: 'magalhaeskleo@gmail.com',
-        subject: 'Recuperação de senha nova',
+        subject: `Recuperação de senha nova ${agora}`,
         html: template({ name: userExists.name, token: token }),
       };
 
