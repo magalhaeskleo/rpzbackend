@@ -51,7 +51,6 @@ module.exports = {
   async index(request, response) {
     const { id } = request.params;
 
-    console.log('ta chegando ', id);
     const tableItens = await connection(tableName)
       .select('*')
       .where('id', id)

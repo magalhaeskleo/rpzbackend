@@ -187,11 +187,10 @@ module.exports = {
           passwordReset: token,
           passwordResetExpires: now,
         });
-      const agora = new Date();
 
       const optionsEmail = {
-        to: 'magalhaeskleo@gmail.com',
-        subject: `Recuperação de senha nova ${agora}`,
+        to: userExists.email,
+        subject: `Recuperação de senha`,
         html: template({ name: userExists.name, token: token }),
       };
 

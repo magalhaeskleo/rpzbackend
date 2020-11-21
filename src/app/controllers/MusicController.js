@@ -68,7 +68,7 @@ module.exports = {
 
   async allForUser(request, response) {
     const { id } = request.params;
-    console.log('all for user', id);
+
     const myListEvents = await connection(tableName)
       .join('show', 'music_request.idShow', 'show.id')
       .select(

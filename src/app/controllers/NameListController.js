@@ -46,8 +46,9 @@ module.exports = {
     } else {
       const tableRegister = await connection('register')
         .select('*')
-        .where('id', idRegister)
+        .where('id', Number(idRegister))
         .first();
+
       const { name } = tableRegister;
 
       return response.json({ name });
@@ -91,7 +92,7 @@ module.exports = {
 
       newTable.push(newElement);
     });
-    console.log('foi assim ', newTable);
+
     return response.json(newTable);
   },
 
