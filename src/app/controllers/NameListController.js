@@ -71,8 +71,7 @@ module.exports = {
 
     const tableItem = await connection(tableName)
       .join('show', 'name_for_list.idShow', 'show.id')
-      .join('file', 'show.flyer', 'file.id')
-      .select('show.id', 'file.path', 'show.date', 'show.name')
+      .select('show.id', 'show.flyer', 'show.date', 'show.name')
       .where('idRegister', Number(id))
       .orderBy('show.date', 'asc');
 
@@ -86,16 +85,13 @@ module.exports = {
       let newElement = {
         id: element.id,
         name: element.name,
-        path: element.path,
+        flyer: element.flyer,
         date: `${dayWeek} ${dayFormat}`,
       };
 
-      let buff = fs.readFileSync(newElement.path);
-      let base64data = buff.toString('base64');
-
-      newTable.push({ ...newElement, base64data });
+      newTable.push(newElement);
     });
-
+    console.log('foi assim ', newTable);
     return response.json(newTable);
   },
 
@@ -103,8 +99,7 @@ module.exports = {
     //  const dot_id = request.headers.authorization;
     const myListEvents = await connection(tableName)
       .join('show', 'name_for_list.idShow', 'show.id')
-      .join('file', 'show.flyer', 'file.id')
-      .select('show.id', 'file.path', 'show.date', 'show.name')
+      .select('show.id', 'show.flyer', 'show.date', 'show.name')
       .groupBy('name_for_list.idShow')
       .orderBy('show.date', 'asc');
 
@@ -112,20 +107,13 @@ module.exports = {
     for (let index = 0; index < myListEvents.length; index++) {
       const element = myListEvents[index];
 
-      const registers = await getRegister(element.id);
-
       let day = new Date(element.date);
       let dayFormat = dateFormat(day, 'dd/mm/yyyy');
       let dayWeek = dayWeekList[day.getDay()];
 
-      let buff = fs.readFileSync(element.path);
-      let base64data = buff.toString('base64');
-
       newTable.push({
         ...element,
-        registers,
         date: `${dayWeek} ${dayFormat}`,
-        base64data,
       });
     }
 

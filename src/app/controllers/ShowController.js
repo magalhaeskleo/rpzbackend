@@ -53,6 +53,42 @@ module.exports = {
 
     return response.json(newTable);
   },
+
+  async allAfterNowSimple(request, response) {
+    //  const dot_id = request.headers.authorization;
+    const now = new Date();
+
+    const { page } = request.query;
+
+    const [count] = await connection(tableName)
+      .where('show.date', '>=', now)
+      .count();
+    response.header('X-Total-Shows-Count', count['count(*)']);
+
+    const tableItens = await connection(tableName)
+      .limit(5)
+      .offset((Number(page) - 1) * 5)
+      .select('*')
+      .where('date', '>=', now)
+      .orderBy('date', 'asc');
+
+    const newTable = [];
+
+    tableItens.forEach((element) => {
+      let day = new Date(element.date);
+      let dayFormat = dateFormat(day, 'dd/mm/yyyy');
+      let dayWeek = dayWeekList[day.getDay()];
+
+      let newElement = {
+        ...element,
+        date: `${dayWeek} ${dayFormat}`,
+      };
+      newTable.push(newElement);
+    });
+
+    return response.json(newTable);
+  },
+
   async allAfterNow(request, response) {
     //  const dot_id = request.headers.authorization;
     const now = new Date();

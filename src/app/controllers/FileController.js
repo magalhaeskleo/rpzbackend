@@ -50,13 +50,19 @@ module.exports = {
   },
   async index(request, response) {
     const { id } = request.params;
+
+    console.log('ta chegando ', id);
     const tableItens = await connection(tableName)
       .select('*')
       .where('id', id)
       .first();
 
-    return response.json(tableItens);
+    let buff = fs.readFileSync(tableItens.path);
+    let base64data = buff.toString('base64');
+
+    return response.json({ id: tableItens.id, base64data });
   },
+
   async delete(request, response) {
     const { id } = request.params;
 

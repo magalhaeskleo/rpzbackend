@@ -68,17 +68,16 @@ module.exports = {
 
   async allForUser(request, response) {
     const { id } = request.params;
-
+    console.log('all for user', id);
     const myListEvents = await connection(tableName)
       .join('show', 'music_request.idShow', 'show.id')
-      .join('file', 'show.flyer', 'file.id')
       .select(
         'music_request.id',
         'music_request.idShow',
         'music_request.idRegister',
         'show.date',
         'show.name',
-        'file.path'
+        'show.flyer'
       )
       .where('idRegister', Number(id))
       .groupBy('music_request.idShow')
@@ -95,14 +94,10 @@ module.exports = {
       let dayFormat = dateFormat(day, 'dd/mm/yyyy');
       let dayWeek = dayWeekList[day.getDay()];
 
-      let buff = fs.readFileSync(element.path);
-      let base64data = buff.toString('base64');
-
       newTable.push({
         ...element,
         musicList,
         date: `${dayWeek} ${dayFormat}`,
-        base64data,
       });
     }
     return response.json(newTable);
@@ -110,18 +105,15 @@ module.exports = {
 
   async all(request, response) {
     //  const dot_id = request.headers.authorization;
-
     const myListEvents = await connection(tableName)
       .join('show', 'music_request.idShow', 'show.id')
-      .join('file', 'show.flyer', 'file.id')
-      .join('register', 'music_request.idRegister', 'register.id')
       .select(
         'music_request.id',
         'music_request.idShow',
-        { nameRegister: 'register.name' },
+        'music_request.idRegister',
         'show.date',
         'show.name',
-        'file.path'
+        'show.flyer'
       )
       .groupBy('music_request.idShow')
       .orderBy('show.date', 'asc');
@@ -137,14 +129,10 @@ module.exports = {
       let dayFormat = dateFormat(day, 'dd/mm/yyyy');
       let dayWeek = dayWeekList[day.getDay()];
 
-      let buff = fs.readFileSync(element.path);
-      let base64data = buff.toString('base64');
-
       newTable.push({
         ...element,
         musicList,
         date: `${dayWeek} ${dayFormat}`,
-        base64data,
       });
     }
     return response.json(newTable);
