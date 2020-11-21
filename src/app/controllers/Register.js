@@ -188,6 +188,7 @@ module.exports = {
           passwordResetExpires: now,
         });
       const agora = new Date();
+
       const optionsEmail = {
         to: 'magalhaeskleo@gmail.com',
         subject: `Recuperação de senha nova ${agora}`,

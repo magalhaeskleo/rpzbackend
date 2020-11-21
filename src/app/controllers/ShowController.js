@@ -56,6 +56,7 @@ module.exports = {
   async allAfterNow(request, response) {
     //  const dot_id = request.headers.authorization;
     const now = new Date();
+
     const { page } = request.query;
 
     const [count] = await connection(tableName)
@@ -199,6 +200,8 @@ module.exports = {
     const created = new Date();
     const modified = new Date();
     const date = new Date(dateShow);
+
+    date.setHours(23, 55, 55);
 
     const [id] = await connection(tableName).insert({
       date,
