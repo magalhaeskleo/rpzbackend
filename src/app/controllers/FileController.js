@@ -22,6 +22,25 @@ module.exports = {
     return res.json(newTable);
   },
 
+  async filesHash(request, response) {
+    const tableItens = await connection(tableName)
+      .select('id', 'path')
+      .where('activated', 0);
+
+    const newTable = [];
+    tableItens.forEach((element) => {
+      let buff = fs.readFileSync(element.path);
+      let base64data = buff.toString('base64');
+
+      newTable.push({
+        id: element.id,
+        base64data,
+      });
+    });
+
+    return response.json(newTable);
+  },
+
   async all(request, response) {
     const { page } = request.query;
 

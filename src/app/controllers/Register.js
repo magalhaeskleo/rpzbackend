@@ -202,7 +202,7 @@ module.exports = {
           );
         }
         return res.send({
-          ok: 'Um email de recuperação foi encaminhado a sua caixa de mensagem',
+          ok: 'Solicitação concluída, verifique seu e-mail',
         });
       });
     } catch (error) {
