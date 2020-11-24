@@ -12,6 +12,6 @@ routes.get('/file/all', File.all);
 routes.get('/file/:id', File.index);
 routes.put('/file/:id', File.delete);
 routes.get('/fileSimpleList', File.fileSimpleList);
-routes.get('/filesHash', File.filesHash);
+routes.get('/filesUrl', File.filesUrl);
 
 module.exports = routes;

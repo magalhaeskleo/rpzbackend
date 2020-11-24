@@ -66,11 +66,22 @@ module.exports = {
     response.header('X-Total-Shows-Count', count['count(*)']);
 
     const tableItens = await connection(tableName)
+      .join('file', 'show.flyer', 'file.id')
       .limit(5)
       .offset((Number(page) - 1) * 5)
-      .select('*')
-      .where('date', '>=', now)
-      .orderBy('date', 'asc');
+      .select(
+        'show.id',
+        'show.date',
+        'show.obs',
+        'show.init',
+        'show.soundCheck',
+        'show.name',
+        'show.flyer',
+        'file.originalname',
+        'file.filename'
+      )
+      .where('show.date', '>=', now)
+      .orderBy('show.date', 'asc');
 
     const newTable = [];
 
@@ -81,6 +92,7 @@ module.exports = {
 
       let newElement = {
         ...element,
+        url: `uploads/${element.filename}`,
         date: `${dayWeek} ${dayFormat}`,
       };
       newTable.push(newElement);
@@ -112,9 +124,8 @@ module.exports = {
         'show.soundCheck',
         'show.flyer',
         'show.name',
-        'file.key',
         'file.originalname',
-        'file.path',
+        'file.filename',
         'show.created',
         'show.modified'
       )
@@ -130,12 +141,11 @@ module.exports = {
 
       let newElement = {
         ...element,
+        url: `uploads/${element.filename}`,
         date: `${dayWeek} ${dayFormat}`,
       };
 
-      let buff = fs.readFileSync(newElement.path);
-      let base64data = buff.toString('base64');
-      newTable.push({ ...newElement, base64data });
+      newTable.push(newElement);
     });
 
     return response.json(newTable);
@@ -154,9 +164,8 @@ module.exports = {
         'show.soundCheck',
         'show.flyer',
         'show.name',
-        'file.key',
         'file.originalname',
-        'file.path',
+        'file.filename',
         'show.created',
         'show.modified'
       )
@@ -171,13 +180,10 @@ module.exports = {
 
       let newElement = {
         ...element,
+        url: `uploads/${element.filename}`,
         date: `${dayWeek} ${dayFormat}`,
       };
-
-      let buff = fs.readFileSync(newElement.path);
-      let base64data = buff.toString('base64');
-
-      newTable.push({ ...newElement, base64data });
+      newTable.push(newElement);
     });
 
     return response.json(newTable);
@@ -196,9 +202,9 @@ module.exports = {
         'show.init',
         'show.soundCheck',
         'show.flyer',
-        'file.key',
+        'show.name',
         'file.originalname',
-        'file.path',
+        'file.filename',
         'show.created',
         'show.modified'
       )

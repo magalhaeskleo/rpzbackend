@@ -22,19 +22,16 @@ module.exports = {
     return res.json(newTable);
   },
 
-  async filesHash(request, response) {
+  async filesUrl(request, response) {
     const tableItens = await connection(tableName)
-      .select('id', 'path')
+      .select('id', 'filename')
       .where('activated', 0);
 
     const newTable = [];
     tableItens.forEach((element) => {
-      let buff = fs.readFileSync(element.path);
-      let base64data = buff.toString('base64');
-
       newTable.push({
         id: element.id,
-        base64data,
+        url: `uploads/${element.filename}`,
       });
     });
 
@@ -56,10 +53,8 @@ module.exports = {
     const newTable = [];
 
     tableItens.forEach((element) => {
-      let buff = fs.readFileSync(element.path);
-      let base64data = buff.toString('base64');
       newTable.push({
-        base64data,
+        url: `uploads/${element.filename}`,
         id: element.id,
         originalname: element.originalname.split('.')[0],
       });

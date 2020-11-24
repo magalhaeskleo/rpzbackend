@@ -71,13 +71,16 @@ module.exports = {
 
     const myListEvents = await connection(tableName)
       .join('show', 'music_request.idShow', 'show.id')
+      .join('file', 'show.flyer', 'file.id')
       .select(
         'music_request.id',
         'music_request.idShow',
         'music_request.idRegister',
         'show.date',
         'show.name',
-        'show.flyer'
+        'show.flyer',
+        'file.originalname',
+        'file.filename'
       )
       .where('idRegister', Number(id))
       .groupBy('music_request.idShow')
@@ -97,6 +100,7 @@ module.exports = {
       newTable.push({
         ...element,
         musicList,
+        url: `uploads/${element.filename}`,
         date: `${dayWeek} ${dayFormat}`,
       });
     }
@@ -107,13 +111,16 @@ module.exports = {
     //  const dot_id = request.headers.authorization;
     const myListEvents = await connection(tableName)
       .join('show', 'music_request.idShow', 'show.id')
+      .join('file', 'show.flyer', 'file.id')
       .select(
         'music_request.id',
         'music_request.idShow',
         'music_request.idRegister',
         'show.date',
         'show.name',
-        'show.flyer'
+        'show.flyer',
+        'file.originalname',
+        'file.filename'
       )
       .groupBy('music_request.idShow')
       .orderBy('show.date', 'asc');
@@ -132,6 +139,7 @@ module.exports = {
       newTable.push({
         ...element,
         musicList,
+        url: `uploads/${element.filename}`,
         date: `${dayWeek} ${dayFormat}`,
       });
     }
